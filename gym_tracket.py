@@ -37,10 +37,20 @@ class Trening:
             for s in self.serie:
                 writer.writerow([self.date, self.name_trening, s.exercise, s.weight, s.reps, s.rir])
 
+    def total_volume(self):
+        return sum(s.weight * s.reps for s in self.serie)
+        
+
+    def count_serie(self):
+        return len(self.serie)
+            
+
+
+
 def get_float(prompt):
     while True:
         try:
-            return float(input(prompt))
+            return float(input(prompt).replace(",", "."))
         except ValueError:
             print("Enter a number")
 
@@ -80,6 +90,8 @@ def get_last_seria(path, exercise):
 
 
 
+
+
 def main():
     name_trening = input("Enter name of training: ")
     today = date.today()
@@ -104,15 +116,6 @@ def main():
 
         trening.add_seria(exercise, weight, reps, rir)
 
-
-
-
-
-
-
-
-
-
     print(trening.name_trening)
     print(trening.date)
     print("----------------")
@@ -120,6 +123,8 @@ def main():
     for seria in trening.list_seria():
         print(seria) 
     # trening.save_trening(DIARY_PATH)
+    print(f"total volume = {trening.total_volume()} kg")
+    print(f"total series = {trening.count_serie()}")
 
 if __name__ == "__main__":
     main()
