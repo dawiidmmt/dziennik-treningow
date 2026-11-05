@@ -88,6 +88,19 @@ def get_last_seria(path, exercise):
                 last = row
         return last
 
+def get_int_in_range(prompt, min_value, max_value):
+    while True:
+        try:
+            value = int(input(prompt))
+            if min_value <= value <= max_value:
+                return value
+            else:
+                print(f"number must be between ({min_value}-{max_value})")
+
+        except ValueError:
+            print("Use number")
+
+
 
 
 
@@ -111,8 +124,8 @@ def main():
             print(f"{last['date']}: {last['weight']} x {last['reps']} - {last['rir']} rir")
 
         weight = get_float("Weight: ")
-        reps = get_int("Reps: ")
-        rir = get_int("RIR: ")
+        reps = get_int_in_range("Reps: ", 1, 50)
+        rir  = get_int_in_range("RIR: ", 0, 10)
 
         trening.add_seria(exercise, weight, reps, rir)
 
