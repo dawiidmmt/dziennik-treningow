@@ -135,7 +135,7 @@ def main():
 
     for seria in trening.list_seria():
         print(seria) 
-    # trening.save_trening(DIARY_PATH)
+    trening.save_trening(DIARY_PATH)
     print(f"total volume = {trening.total_volume()} kg")
     print(f"total series = {trening.count_serie()}")
 
