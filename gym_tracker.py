@@ -145,14 +145,14 @@ def main():
         rir  = get_int_in_range("RIR: ", 0, 10)
 
         trening.add_seria(exercise, weight, reps, rir)
-        trening.save_trening(DIARY_PATH)
 
     print(trening.name_trening)
     print(trening.date)
     print("----------------")
 
     for seria in trening.list_seria():
-        print(seria) 
+        print(seria)
+    trening.save_trening(DIARY_PATH)
     print(f"total volume = {trening.total_volume()} kg")
     print(f"total series = {trening.count_serie()}")
 
