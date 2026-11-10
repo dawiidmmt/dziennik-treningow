@@ -38,7 +38,7 @@ No external libraries are needed, only Python 3.
 ```bash
 git clone https://github.com/dawiidmmt/workout-logger.git
 cd workout-logger
-python3 dziennik_treningow.py
+python3 gym_tracker.py
 ```
 
 To test without touching your real data, change `DIARY_PATH` at the top of the file to `"test.csv"`.
