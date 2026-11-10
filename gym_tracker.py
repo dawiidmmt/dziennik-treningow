@@ -2,6 +2,7 @@ import csv
 import os
 from datetime import date
 from exercises import EXERCISES
+from trainings import TRAININGS
 DIARY_PATH = "dziennik.csv"
 
 class Trening:
@@ -75,6 +76,20 @@ def choose_exercise(exercises):
         else:
             print("Enter right number")
 
+def choose_training(trainings):
+    for i, training in enumerate(trainings, start=1):
+        print(f"{i}. {training} ")
+    print("0. finish")
+
+    while True:
+        number = get_int("Choose training: ")
+        if number == 0:
+            return None
+        elif 1 <= number <= len(trainings):
+            return trainings[number - 1]
+        else:
+            print("Enter right number")
+
 def get_last_seria(path, exercise):
     file_exists = os.path.exists(path)
     last = None
@@ -106,12 +121,14 @@ def get_int_in_range(prompt, min_value, max_value):
 
 
 def main():
-    name_trening = input("Enter name of training: ")
     today = date.today()
+    name_trening = choose_training(TRAININGS)
     trening = Trening(name_trening, today)
+    if trening is None:
+        print("Thank you")
 
     while True:
-        
+
         exercise = choose_exercise(EXERCISES)
         if exercise is None:
                 print("Thank you")
@@ -128,6 +145,7 @@ def main():
         rir  = get_int_in_range("RIR: ", 0, 10)
 
         trening.add_seria(exercise, weight, reps, rir)
+        trening.save_trening(DIARY_PATH)
 
     print(trening.name_trening)
     print(trening.date)
@@ -135,7 +153,6 @@ def main():
 
     for seria in trening.list_seria():
         print(seria) 
-    trening.save_trening(DIARY_PATH)
     print(f"total volume = {trening.total_volume()} kg")
     print(f"total series = {trening.count_serie()}")
 
