@@ -124,12 +124,13 @@ def main():
     today = date.today()
     name_trening = choose_training(TRAININGS)
     trening = Trening(name_trening, today)
+    if name_trening is None:
+        print("Thank You")
+        return 
         
 
     while True:
-        if name_trening is None:
-            print("Thank you")
-            break
+
 
         exercise = choose_exercise(EXERCISES)
         if exercise is None:
