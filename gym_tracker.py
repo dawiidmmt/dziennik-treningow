@@ -132,6 +132,19 @@ def get_last_seria(path, exercise):
                 last = row
         return last
 
+def exercise_history(path, exercise_name):
+    history = []
+    file_exists = os.path.exists(path)
+    if not file_exists:
+        return None
+
+    with open(path, "r", newline="") as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            if row["exercise"] == exercise_name:
+                history.append(row)
+    return history
+
 def get_int_in_range(prompt, min_value, max_value):
     while True:
         try:
@@ -159,17 +172,35 @@ def new_training(today):
 def main():
     today = date.today()
 
+    print("==========GYM TRACKER==========")
     choice = main_menu(MENU)
     if choice is None:
         print("Thank you")
         return
     elif choice == 1:
         trening = new_training(today)
+
     elif choice == 2:
-        history = get_last_training(DIARY_PATH)
-        for row in history:
-            print(f"{row['date']}: {row['trening']} - {row['exercise']} - {row['weight']} x {row['reps']} - {row['rir']} rir")
+        last_training = get_last_training(DIARY_PATH)
+        if last_training:
+            for row in last_training:
+                print(f"{row['date']}: {row['trening']} - {row['exercise']} - {row['weight']} x {row['reps']} - {row['rir']} rir")
+        else:
+            print("No previous data")
         return
+    
+    elif choice == 3:
+        exercise_name = choose_exercise(EXERCISES)
+        if exercise_name is not None:
+            history = exercise_history(DIARY_PATH, exercise_name)
+            if not history:
+                print("No previous data")
+            else:
+                for row in history:
+                    print(f"{row["date"]} | {row["weight"]} x {row["reps"]} | RIR: {row["rir"]}")
+        return
+        
+            
 
     while True:       
         
