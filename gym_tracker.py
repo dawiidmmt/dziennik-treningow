@@ -3,6 +3,7 @@ import os
 from datetime import date
 from exercises import EXERCISES
 from trainings import TRAININGS
+from menu import MENU
 DIARY_PATH = "dziennik.csv"
 
 class Trening:
@@ -45,9 +46,6 @@ class Trening:
     def count_serie(self):
         return len(self.serie)
             
-
-
-
 def get_float(prompt):
     while True:
         try:
@@ -61,6 +59,20 @@ def get_int(prompt):
             return int(input(prompt))
         except ValueError:
             print("Enter a number")
+
+def main_menu(options):
+    for i, option in enumerate(options, start=1):
+        print(f"{i}. {option}")
+    print("0. finish")
+
+    while True:
+        number = get_int("Choose Option: ")
+        if number == 0:
+            return None
+        elif 1 <= number <= len(options):
+            return number
+        else:
+            print("Enter right number")
 
 def choose_exercise(exercises):
     for i, exercise in enumerate(exercises, start=1):
@@ -90,6 +102,23 @@ def choose_training(trainings):
         else:
             print("Enter right number")
 
+def get_last_training(path):
+    last_trainings = []
+    file_exists = os.path.exists(path)
+    last_date = None
+    if not file_exists:
+        return None
+
+    with open(path, "r", newline="") as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            if last_date is None or row["date"] > last_date:
+                last_date = row["date"]
+                last_trainings.clear()
+            if last_date == row["date"]:
+                last_trainings.append(row)
+        return last_trainings
+
 def get_last_seria(path, exercise):
     file_exists = os.path.exists(path)
     last = None
@@ -115,6 +144,13 @@ def get_int_in_range(prompt, min_value, max_value):
         except ValueError:
             print("Use number")
 
+def new_training(today):
+    name_trening = choose_training(TRAININGS)        
+    if name_trening is None:
+        print("Thank You")
+        return
+    trening = Trening(name_trening, today)
+    return trening
 
 
 
@@ -122,16 +158,21 @@ def get_int_in_range(prompt, min_value, max_value):
 
 def main():
     today = date.today()
-    name_trening = choose_training(TRAININGS)
-    trening = Trening(name_trening, today)
-    if name_trening is None:
-        print("Thank You")
-        return 
+
+    choice = main_menu(MENU)
+    if choice is None:
+        print("Thank you")
+        return
+    elif choice == 1:
+        trening = new_training(today)
+    elif choice == 2:
+        history = get_last_training(DIARY_PATH)
+        for row in history:
+            print(f"{row['date']}: {row['trening']} - {row['exercise']} - {row['weight']} x {row['reps']} - {row['rir']} rir")
+        return
+
+    while True:       
         
-
-    while True:
-
-
         exercise = choose_exercise(EXERCISES)
         if exercise is None:
                 print("Thank you")
