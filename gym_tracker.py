@@ -45,7 +45,31 @@ class Trening:
 
     def count_serie(self):
         return len(self.serie)
-            
+
+def get_progress(path, exercise_name):
+    weights = []
+    file_exists = os.path.exists(path)
+    if not file_exists:
+        return None
+
+    with open(path, "r", newline="") as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            if row['exercise'] == exercise_name:
+                weights.append(float(row['weight']))
+        
+    if not weights:
+        return None
+
+    if weights[0] == 0:
+        return None
+        
+    first = weights[0]
+    last = weights[-1]
+    progress = last - first
+    progress_percentage = progress/first * 100
+    return progress_percentage
+                    
 def get_float(prompt):
     while True:
         try:
@@ -166,9 +190,6 @@ def new_training(today):
     return trening
 
 
-
-
-
 def main():
     today = date.today()
 
@@ -198,6 +219,16 @@ def main():
             else:
                 for row in history:
                     print(f"{row["date"]} | {row["weight"]} x {row["reps"]} | RIR: {row["rir"]}")
+        return
+
+    elif choice == 4:
+        exercise_name = choose_exercise(EXERCISES)
+        if exercise_name is not None:
+            progress = get_progress(DIARY_PATH, exercise_name)
+            if progress is None:
+                print("No previous data")
+            else:
+                print(f"You progressed {progress}% on {exercise_name}")
         return
         
             
