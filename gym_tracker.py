@@ -47,7 +47,7 @@ class Trening:
         return len(self.serie)
 
 def get_progress(path, exercise_name):
-    weights = []
+    volume_by_date = {}
     file_exists = os.path.exists(path)
     if not file_exists:
         return None
@@ -56,19 +56,29 @@ def get_progress(path, exercise_name):
         reader = csv.DictReader(file)
         for row in reader:
             if row['exercise'] == exercise_name:
-                weights.append(float(row['weight']))
+                training_date = row['date']
+                weight = float(row['weight'])
+                reps = int(row['reps'])
+                total = weight * reps
+                volume_by_date[training_date] = volume_by_date.get(training_date, 0) + total
+
+    if not volume_by_date:
+        return None
+    dates = sorted(volume_by_date)
         
-    if not weights:
+
+    first_date = dates[0]
+    last_date = dates[-1]
+
+    first_volume = volume_by_date[first_date]
+    last_volume = volume_by_date[last_date]
+    if first_volume == 0:
         return None
 
-    if weights[0] == 0:
-        return None
-        
-    first = weights[0]
-    last = weights[-1]
-    progress = last - first
-    progress_percentage = progress/first * 100
-    return progress_percentage
+    
+    progress_percentage = ((last_volume - first_volume)/ first_volume) * 100
+    return f"Your training progress: {progress_percentage:.2f} %"
+
                     
 def get_float(prompt):
     while True:
@@ -228,7 +238,7 @@ def main():
             if progress is None:
                 print("No previous data")
             else:
-                print(f"You progressed {progress}% on {exercise_name}")
+                print(get_progress(DIARY_PATH, exercise_name))
         return
         
             
