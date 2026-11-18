@@ -54,7 +54,7 @@ To test without touching your real data, change `DIARY_PATH` at the top of the f
 ## Roadmap
 
 - [x] Stage 1: logger in pure Python (classes, menu, CSV)
-- [ ] Main menu: new training / show history / quit
-- [ ] Save after every set, so nothing is lost if the program is closed
+- [x] Main menu: new training / show history / quit
+- [x] Save after every set, so nothing is lost if the program is closed
 - [ ] Stage 2: progress analysis and charts with pandas and matplotlib
 - [ ] Stage 3: predicting the next working weight or a training plateau with scikit-learn
